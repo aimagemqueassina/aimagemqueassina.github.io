@@ -78,7 +78,7 @@
   </div>
 
   <div class="acoes">
-    <a class="btn" href="./">Voltar para a página</a>
+    <a class="btn" href="./" data-voltar>Voltar para a página</a>
     <a class="link" href="#" data-whatsapp>Dúvidas? Fale no WhatsApp</a>
   </div>
 </main>
@@ -93,6 +93,16 @@
   document.querySelector('[data-status="' + (aprovado ? "aprovado" : "pendente") + '"]').hidden = false;
 
   document.querySelectorAll("[data-whatsapp]").forEach(function (a) { a.href = WHATSAPP_URL; });
+
+  // Pagamento pendente: o botão leva de volta ao checkout do Mercado Pago dessa inscrição.
+  var preferencia = q.get("preference_id");
+  if (!aprovado) {
+    var voltar = document.querySelector("[data-voltar]");
+    voltar.textContent = "Voltar à página de pagamento";
+    voltar.href = preferencia
+      ? "https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=" + encodeURIComponent(preferencia)
+      : "./#informacoes";
+  }
 
   // Conversão final no Analytics: compra aprovada.
   var pagamento = q.get("payment_id") || q.get("collection_id");
