@@ -14,7 +14,8 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-4N6QSP6R6C');
+  // Com ?debug no endereço, a tag envia em modo de depuração (eventos aparecem no DebugView do GA4).
+  gtag('config', 'G-4N6QSP6R6C', /[?&]debug/.test(location.search) ? { debug_mode: true } : {});
 </script>
 
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
@@ -99,9 +100,9 @@
   // snake_case em português; só begin_checkout e purchase usam nomes do GA4. Nunca enviar dados pessoais.
   // Para conferir ao vivo: acrescente ?debug ao endereço e veja o DebugView do GA4.
   var DEBUG_RASTREIO = q.has("debug");
-  if (window.gtag && DEBUG_RASTREIO) gtag("set", "debug_mode", true);
   function track(nome, dados) {
-    try { if (window.gtag) gtag("event", nome, dados || {}); } catch (e) {}
+    var p = dados || {};
+    try { if (window.gtag) gtag("event", nome, p); } catch (e) {}
     if (DEBUG_RASTREIO && window.console) console.log("[track]", nome, dados || "");
   }
 

@@ -14,7 +14,8 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-4N6QSP6R6C');
+  // Com ?debug no endereço, a tag envia em modo de depuração (eventos aparecem no DebugView do GA4).
+  gtag('config', 'G-4N6QSP6R6C', /[?&]debug/.test(location.search) ? { debug_mode: true } : {});
 </script>
 
 <meta property="og:type" content="website">
@@ -682,7 +683,6 @@
   // recomendados do GA4, para o funil de receita funcionar nos relatórios. Nunca enviar dados pessoais.
   // Para conferir ao vivo: abra a página com ?debug no fim do endereço e veja o DebugView do GA4.
   var DEBUG_RASTREIO = new URLSearchParams(location.search).has("debug");
-  if (window.gtag && DEBUG_RASTREIO) gtag("set", "debug_mode", true);
   function track(nome, dados, depois) {
     var p = dados || {}, feito = false;
     function seguir() { if (feito || !depois) return; feito = true; depois(); }
