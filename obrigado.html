@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inscrição · Workshop A Imagem que Assina</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#6B0D1B">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4N6QSP6R6C"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4N6QSP6R6C');
+</script>
+
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/achemost.woff2" as="font" type="font/woff2" crossorigin>
+
+<style>
+  @font-face { font-family: "Achemost"; src: url("assets/fonts/achemost.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat-semibold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+
+  :root {
+    --bordo: #6B0D1B;
+    --creme: #F5DDCB;
+    --laranja: #EA8521;
+    --laranja-claro: #F29A45;
+    --titulo: "Achemost", Georgia, "Times New Roman", serif;
+    --texto: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; min-height: 100vh; min-height: 100svh;
+    display: flex; align-items: center;
+    background: var(--bordo); color: var(--creme);
+    font-family: var(--texto); font-size: 1.0625rem; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible { outline: 3px solid var(--laranja); outline-offset: 3px; }
+  main { width: 100%; max-width: 640px; margin: 0 auto; padding: 56px 22px; }
+  .rotulo { margin: 0 0 18px; color: var(--laranja); font-weight: 600; font-size: .75rem; letter-spacing: .26em; text-transform: uppercase; }
+  h1 { margin: 0 0 20px; font-family: var(--titulo); font-weight: 400; font-size: clamp(2.2rem, 9vw, 3.4rem); line-height: 1.05; text-wrap: balance; }
+  h1 em { font-style: normal; color: var(--laranja); }
+  p { margin: 0 0 1em; }
+  .acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 52px; padding: 12px 26px; border-radius: 6px;
+    background: var(--laranja); color: var(--bordo);
+    font-weight: 600; font-size: .875rem; letter-spacing: .06em; text-transform: uppercase; text-decoration: none;
+  }
+  .btn:hover { background: var(--laranja-claro); }
+  .link { display: inline-flex; align-items: center; min-height: 52px; color: var(--creme); font-weight: 600; text-underline-offset: 3px; }
+  [hidden] { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <p class="rotulo">Workshop A Imagem que Assina</p>
+
+  <div data-status="aprovado" hidden>
+    <h1>Pagamento confirmado. <em>Sua vaga está garantida.</em></h1>
+    <p>Em até 2 horas você recebe no seu WhatsApp o link do grupo do workshop. Lá chegam todas as informações sobre o dia.</p>
+    <p>Nos vemos dia 17 de novembro, às 19h, na CDL Maravilha.</p>
+  </div>
+
+  <div data-status="pendente" hidden>
+    <h1>Inscrição recebida. <em>Falta confirmar o pagamento.</em></h1>
+    <p>Assim que o Mercado Pago confirmar o pagamento, a sua vaga fica garantida. Em até 2 horas depois da confirmação, enviamos no seu WhatsApp o link do grupo do workshop, com todas as informações sobre o dia.</p>
+    <p>Se pagou com Pix, a confirmação costuma levar poucos minutos.</p>
+  </div>
+
+  <div class="acoes">
+    <a class="btn" href="./">Voltar para a página</a>
+    <a class="link" href="#" data-whatsapp>Dúvidas? Fale no WhatsApp</a>
+  </div>
+</main>
+
+<script>
+  const WHATSAPP_URL = "https://wa.me/554999413515?text=Ol%C3%A1!%20Tenho%20uma%20d%C3%BAvida%20sobre%20o%20workshop%20A%20Imagem%20que%20Assina."; // +55 49 9941-3515
+
+  // O Mercado Pago volta para cá com ?collection_status=approved|pending|in_process e o ID do pagamento.
+  var q = new URLSearchParams(location.search);
+  var situacao = q.get("collection_status") || q.get("status");
+  var aprovado = situacao === "approved";
+  document.querySelector('[data-status="' + (aprovado ? "aprovado" : "pendente") + '"]').hidden = false;
+
+  document.querySelectorAll("[data-whatsapp]").forEach(function (a) { a.href = WHATSAPP_URL; });
+
+  // Conversão final no Analytics: compra aprovada.
+  var pagamento = q.get("payment_id") || q.get("collection_id");
+  if (aprovado && window.gtag) {
+    gtag("event", "purchase", {
+      transaction_id: pagamento || undefined,
+      value: 197, currency: "BRL",
+      items: [{ item_id: "workshop-imagem-que-assina", item_name: "Workshop A Imagem que Assina", price: 197, quantity: 1 }]
+    });
+  }
+</script>
+</body>
+</html>

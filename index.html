@@ -182,6 +182,12 @@
     font-size: clamp(1.3rem, 5.4vw, 2rem); line-height: 1.05;
   }
 
+  /* Degradê do creme para o bordô na passagem para a seção seguinte (só no espaço vazio do fim) */
+  .creme.degrade-baixo {
+    padding-bottom: calc(var(--secao) + 96px);
+    background: linear-gradient(to bottom, var(--creme) 0, var(--creme) calc(100% - 200px), var(--bordo) 100%);
+  }
+
   /* Ponte */
   .ponte h2 { font-size: clamp(2.3rem, 9.6vw, 4.4rem); line-height: 1; max-width: 11em; margin-bottom: 28px; }
   .ponte p { font-size: 1.125rem; font-weight: 500; max-width: 26em; margin-bottom: 32px; }
@@ -212,32 +218,25 @@
   .pessoa__bio { margin: 18px 0 0; max-width: 28em; }
   .pessoa__assina { font-family: var(--detalhe); color: var(--laranja); font-size: 2.1rem; line-height: 1; margin: 14px 0 0; }
   .conduz-cta { margin-top: 56px; }
-  .info-cta { margin-top: 40px; }
 
   /* Informações */
-  .convite { display: grid; gap: 36px; padding: 36px 0; border-top: 1px solid var(--linha-bordo); border-bottom: 1px solid var(--linha-bordo); }
-  .convite__data { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 18px; align-items: center; }
-  .convite__dia { font-family: var(--titulo); font-size: clamp(6.5rem, 34vw, 11rem); line-height: .78; color: var(--vermelho); }
-  .convite__mes { margin: 0; font-family: var(--titulo); font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.1; overflow-wrap: break-word; }
-  .convite__mes span { display: block; }
-  .convite__hora {
-    grid-column: 1 / -1; margin: 24px 0 0; padding-top: 18px; border-top: 1px solid var(--linha-bordo);
-    font-family: var(--titulo); font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.1;
+  .evento { margin: 0; border-top: 1px solid var(--linha-bordo); }
+  .evento > div {
+    display: grid; grid-template-columns: 128px minmax(0, 1fr); column-gap: 16px; align-items: baseline;
+    padding: 16px 0; border-bottom: 1px solid var(--linha-bordo);
   }
-  .convite__hora small, .convite__itens dt {
-    display: block; font-family: var(--texto); font-weight: 600; font-size: .75rem; letter-spacing: .2em; text-transform: uppercase;
-  }
-  .convite__hora small { margin-top: 8px; }
-  .convite__itens { margin: 0; display: grid; }
-  .convite__itens > div { padding: 18px 0; border-top: 1px solid var(--linha-bordo); overflow-wrap: break-word; }
-  .convite__itens > div:first-child { border-top: 0; padding-top: 0; }
-  .convite__itens dt { margin-bottom: 8px; }
-  .convite__itens dd { margin: 0; }
-  .convite__itens dd > span { display: block; }
-  .convite__itens .grande { font-family: var(--titulo); font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.1; margin-bottom: 4px; }
+  .evento dt { font-weight: 600; font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; }
+  .evento dd { margin: 0; font-size: .9375rem; line-height: 1.5; overflow-wrap: break-word; }
+  .evento dd strong { display: block; margin-bottom: 2px; font-family: var(--titulo); font-weight: 400; font-size: 1.375rem; line-height: 1.2; }
+  .evento dd span { display: block; }
+  .evento .mapa { font-size: .875rem; }
   .mapa { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-underline-offset: 3px; }
 
-  /* Passos */
+  /* Informações: menos respiro no topo, o formulário aparece logo */
+  #informacoes { padding-top: calc(var(--secao) * .5); }
+
+  /* Passos: seção mais enxuta que as demais */
+  #inscricao { padding: calc(var(--secao) * .6) 0; }
   .passos { list-style: none; margin: 0; padding: 0; counter-reset: n; }
   .passos li {
     counter-increment: n;
@@ -249,6 +248,45 @@
   .passos li::before { content: counter(n); font-family: var(--detalhe); font-size: 2.6rem; line-height: 1; color: var(--laranja); }
   .passos p { margin: 0; font-weight: 400; }
   .passos strong { display: block; font-family: var(--titulo); font-weight: 400; font-size: 1.5rem; line-height: 1.15; margin-bottom: 6px; }
+
+  /* Formulário de inscrição */
+  /* Cartão bordô com o formulário, ao lado das informações no desktop */
+  .cartao-form { margin-top: 32px; padding: 24px 18px 26px; border-radius: 10px; background: var(--bordo); color: var(--creme); }
+  .cartao-form .acento { color: var(--laranja); }
+  .cartao-form :focus-visible { outline-color: var(--laranja); }
+  .form { scroll-margin-top: 31px; }
+  .form__titulo { font-size: clamp(1.6rem, 6vw, 2rem); line-height: 1.1; margin-bottom: 18px; }
+  .form__campos { display: grid; gap: 14px; }
+  .campo { min-width: 0; }
+  .campo > label:not(.aceite) {
+    display: block; margin-bottom: 5px;
+    font-weight: 600; font-size: .6875rem; letter-spacing: .14em; text-transform: uppercase;
+  }
+  .campo .opcional { font-weight: 500; letter-spacing: .04em; text-transform: none; opacity: .8; }
+  .campo input[type="text"], .campo input[type="email"], .campo input[type="tel"], .campo select, .campo textarea {
+    display: block; width: 100%; min-height: 44px; padding: 8px 12px;
+    font: inherit; font-size: 1rem; line-height: 1.4;
+    background: var(--creme); color: var(--bordo);
+    border: 2px solid var(--creme); border-radius: 6px;
+  }
+  .campo textarea { min-height: 66px; resize: vertical; }
+  .campo select { appearance: none; padding-right: 40px; cursor: pointer;
+    background-image: linear-gradient(45deg, transparent 50%, var(--bordo) 50%), linear-gradient(135deg, var(--bordo) 50%, transparent 50%);
+    background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%; background-size: 6px 6px; background-repeat: no-repeat; }
+  .campo input[aria-invalid="true"], .campo select[aria-invalid="true"], .campo textarea[aria-invalid="true"] { border-color: var(--laranja); box-shadow: 0 0 0 1px var(--laranja); }
+  .aceite { display: flex; align-items: flex-start; gap: 10px; padding: 3px 0; font-size: .8125rem; line-height: 1.4; cursor: pointer; }
+  .aceite input { flex: none; width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--laranja); }
+  .isca { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .form__acao { margin-top: 18px; }
+  .form .btn { width: 100%; min-height: 52px; border: 0; cursor: pointer; font-family: inherit; }
+  .form .btn[disabled] { opacity: .7; cursor: progress; }
+  .form__nota { margin: 10px 0 0; font-size: .8125rem; text-align: center; }
+  .form__msg { margin: 14px 0 0; font-weight: 600; font-size: .9375rem; }
+  .form__msg:empty { display: none; }
+  .form__ok { padding: 8px 0; }
+  .form__ok[hidden] { display: none; }
+  .form__ok p { font-size: 1rem; font-weight: 500; margin: 0; }
+  .form__ok strong { display: block; font-family: var(--titulo); font-weight: 400; font-size: clamp(1.6rem, 6vw, 2rem); line-height: 1.1; margin-bottom: 10px; color: var(--laranja); }
 
   /* FAQ */
   .faq details { border-bottom: 1px solid var(--linha-bordo); }
@@ -298,6 +336,7 @@
   }
   @media (max-width: 379px) {
     .faixa-topo__prazo { display: none; }
+    .evento > div { grid-template-columns: minmax(0, 1fr); row-gap: 6px; }
     .quando__col + .quando__col { border-left: 0; padding-left: 0; flex-basis: 100%; }
     .btn { font-size: .8125rem; letter-spacing: .02em; padding: 14px 12px; }
     .hero__foto img { height: 26svh; min-height: 180px; }
@@ -320,10 +359,9 @@
     .passos li:first-child { border-top: 0; padding-left: 0; }
     .passos li + li { border-left: 1px solid var(--linha-creme); }
     .passos li::before { display: block; margin-bottom: 16px; }
-    .convite__itens { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .convite__itens > div { border-top: 0; padding: 22px 0 0 28px; border-left: 1px solid var(--linha-bordo); }
-    .convite__itens > div:first-child { grid-column: 1 / -1; border-left: 0; padding: 0 0 22px; border-bottom: 1px solid var(--linha-bordo); }
-    .convite__itens > div:nth-child(2) { border-left: 0; padding-left: 0; }
+    .cartao-form { padding: 32px 32px 34px; }
+    .form__campos { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 14px; }
+    .form__campos .inteiro { grid-column: 1 / -1; }
   }
 
   @media (min-width: 960px) {
@@ -339,7 +377,6 @@
     .quando { align-self: flex-start; padding-right: 8px; }
     .hero__acao { align-self: flex-start; }
 
-    .contexto { margin-left: 33.333%; padding-left: 32px; }
     .dores { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .dores li, .dores li:nth-child(even) { padding: 32px 32px 36px; border-left: 1px solid var(--linha-bordo); font-size: 1rem; }
     .dores li:nth-child(3n + 1) { padding-left: 0; border-left: 0; }
@@ -350,9 +387,10 @@
     .ponte .wrap { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 64px; align-items: end; }
     .ponte p { margin-bottom: 28px; }
 
-    .convite { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0; padding: 48px 0; }
-    .convite__data { padding-right: 48px; border-right: 1px solid var(--linha-bordo); align-content: center; }
-    .convite__itens { padding-left: 48px; align-content: center; }
+    /* Informações à esquerda (fixas ao rolar), formulário à direita */
+    .info-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: start; }
+    .info-grid__evento { position: sticky; top: 63px; }
+    .cartao-form { margin-top: 0; }
     .duas-colunas { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: start; }
 
     .duo { gap: 56px; max-width: 860px; }
@@ -363,7 +401,7 @@
 <body>
 
 <div class="aviso-dev" id="aviso-dev" hidden>
-  Provisório: falta o link do formulário do Notion. Cole em INSCRICAO_URL, no fim do index.html.
+  Provisório: falta o endereço do webhook do Make. Cole em FORM_WEBHOOK_URL, no fim do index.html.
 </div>
 
 <div class="faixa-topo">
@@ -395,7 +433,7 @@
 
 <main>
 
-  <section class="creme">
+  <section class="creme degrade-baixo">
     <div class="wrap">
       <p class="destaque revela">A sua competência técnica abre portas. A forma como você é percebido <em class="acento">decide quais.</em></p>
       <p class="contexto">Antes de você apresentar um projeto, negociar ou liderar uma reunião, as pessoas já formaram uma ideia sobre você. Quase ninguém cuida disso com intenção.</p>
@@ -472,42 +510,96 @@
   <section class="creme" id="informacoes">
     <div class="wrap">
       <h2 class="rotulo">Informações</h2>
-      <div class="convite">
-        <div class="convite__data">
-          <span class="convite__dia">17</span>
-          <p class="convite__mes"><span>novembro</span><span>terça</span></p>
-          <p class="convite__hora">19h às 21h<small>início pontual</small></p>
+      <div class="info-grid">
+        <div class="info-grid__evento">
+          <dl class="evento">
+            <div><dt>Data</dt><dd><strong>17 de novembro</strong><span>terça-feira</span></dd></div>
+            <div><dt>Horário</dt><dd><strong>19h às 21h</strong><span>início pontual</span></dd></div>
+            <div>
+              <dt>Local</dt>
+              <dd>
+                <strong>CDL Maravilha</strong>
+                <span>R. Jorge Lacerda, 85 - Centro, Maravilha - SC, 89874-000</span>
+                <a class="mapa" href="https://www.google.com/maps/search/?api=1&amp;query=R.+Jorge+Lacerda%2C+85+-+Centro%2C+Maravilha+-+SC%2C+89874-000" target="_blank" rel="noopener">Ver no mapa<span class="sr-only"> (abre em nova aba)</span></a>
+              </dd>
+            </div>
+            <div><dt>Investimento</dt><dd><strong>R$ 197</strong><span>Pix ou cartão</span></dd></div>
+            <div><dt>Inscrições</dt><dd><strong>até 14/11</strong><span>vagas limitadas</span></dd></div>
+          </dl>
         </div>
-        <dl class="convite__itens">
-          <div>
-            <dt>Local</dt>
-            <dd>
-              <span class="grande">CDL Maravilha</span>
-              <span>R. Jorge Lacerda, 85 - Centro<br>Maravilha - SC, 89874-000</span>
-              <a class="mapa" href="https://www.google.com/maps/search/?api=1&amp;query=R.+Jorge+Lacerda%2C+85+-+Centro%2C+Maravilha+-+SC%2C+89874-000" target="_blank" rel="noopener">Ver no mapa<span class="sr-only"> (abre em nova aba)</span></a>
-            </dd>
+        <div class="cartao-form">
+          <form class="form" id="formulario" novalidate>
+            <h3 class="form__titulo">Faça a sua <em class="acento">inscrição</em></h3>
+            <div class="form__campos">
+              <div class="campo inteiro">
+                <label for="f-nome">Nome completo</label>
+                <input id="f-nome" name="nome" type="text" autocomplete="name" required>
+              </div>
+              <div class="campo">
+                <label for="f-whats">WhatsApp</label>
+                <input id="f-whats" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(49) 99999-9999" required>
+              </div>
+              <div class="campo">
+                <label for="f-email">E-mail</label>
+                <input id="f-email" name="email" type="email" autocomplete="email" required>
+              </div>
+              <div class="campo">
+                <label for="f-empresa">Empresa <span class="opcional">(opcional)</span></label>
+                <input id="f-empresa" name="empresa" type="text" autocomplete="organization">
+              </div>
+              <div class="campo">
+                <label for="f-cargo">Você é</label>
+                <select id="f-cargo" name="cargo" required>
+                  <option value="">Selecione</option>
+                  <option>Dono(a) ou sócio(a)</option>
+                  <option>Liderança ou gestão</option>
+                  <option>Colaborador(a)</option>
+                  <option>Autônomo(a) ou profissional liberal</option>
+                </select>
+              </div>
+              <div class="campo inteiro">
+                <label for="f-origem">Como ficou sabendo do workshop?</label>
+                <select id="f-origem" name="origem" required>
+                  <option value="">Selecione</option>
+                  <option>Palestra no BNI</option>
+                  <option>Convite pessoal</option>
+                  <option>Instagram</option>
+                  <option>Indicação de alguém</option>
+                  <option>CDL</option>
+                  <option>Outro</option>
+                </select>
+              </div>
+              <div class="campo inteiro">
+                <label for="f-desafio">Maior desafio com a sua imagem no trabalho <span class="opcional">(opcional)</span></label>
+                <textarea id="f-desafio" name="desafio" rows="2"></textarea>
+              </div>
+              <div class="campo inteiro">
+                <label class="aceite"><input type="checkbox" name="lgpd" value="sim" required>Autorizo o uso dos meus dados para organizar a minha inscrição e o workshop, conforme a LGPD.</label>
+                <label class="aceite"><input type="checkbox" name="novidades" value="sim">Quero receber conteúdos, novidades e convites para eventos da Gabrielle Mainardi e da Milena Fagundes por WhatsApp e e-mail.</label>
+              </div>
+              <div class="isca" aria-hidden="true"><label for="f-site">Não preencha</label><input id="f-site" name="site" type="text" tabindex="-1" autocomplete="off"></div>
+            </div>
+            <div class="form__acao">
+              <button class="btn" type="submit">Ir para o pagamento</button>
+              <p class="form__nota">Você será levado ao Mercado Pago para pagar R$ 197 com Pix ou cartão.</p>
+              <p class="form__msg" role="alert" aria-live="assertive"></p>
+            </div>
+          </form>
+          <div class="form__ok" id="form-ok" tabindex="-1" hidden>
+            <p><strong>Inscrição recebida.</strong>Em até 24h enviamos o link de pagamento no seu WhatsApp. A vaga é confirmada com o pagamento.</p>
           </div>
-          <div>
-            <dt>Investimento</dt>
-            <dd><span class="grande">R$ 197</span><span>via Pix</span></dd>
-          </div>
-          <div>
-            <dt>Inscrições</dt>
-            <dd><span class="grande">até 14/11</span><span>vagas limitadas</span></dd>
-          </div>
-        </dl>
+        </div>
       </div>
-      <a class="btn info-cta" href="#informacoes" data-inscricao>Fazer minha inscrição</a>
     </div>
   </section>
 
   <section id="inscricao">
     <div class="wrap">
-      <h2>Como se <em class="acento">inscrever</em></h2>
+      <h2>Como garantir <em class="acento">minha vaga</em></h2>
       <ol class="passos">
-        <li><div><strong>Inscrição</strong><p>Clique no botão de inscrição e preencha o formulário.</p></div></li>
-        <li><div><strong>Pagamento</strong><p>Em até 24h, entramos em contato com as informações para o pagamento.</p></div></li>
-        <li><div><strong>Grupo exclusivo</strong><p>Com o pagamento feito, você recebe o link do grupo do workshop no WhatsApp. Lá chegam todas as informações sobre o dia, e o networking já começa antes do encontro.</p></div></li>
+        <li><div><strong>Inscrição</strong><p>Preencha o formulário de inscrição. Leva menos de 2 minutos.</p></div></li>
+        <li><div><strong>Pagamento</strong><p>Ao enviar, você vai direto para o Mercado Pago e paga com Pix ou cartão. A vaga é confirmada com o pagamento.</p></div></li>
+        <li><div><strong>Grupo exclusivo</strong><p>Com o pagamento confirmado, você recebe o link do grupo do workshop no WhatsApp. Lá chegam todas as informações sobre o dia, e o networking já começa antes do encontro.</p></div></li>
       </ol>
     </div>
   </section>
@@ -567,8 +659,8 @@
 
 
 <script>
-  // Links únicos da página. Troque aqui e todos os botões mudam juntos.
-  const INSCRICAO_URL = "https://impartial-lodge-762.notion.site/406144e49d6d80769597e198e65dce9d?pvs=105"; // link público do formulário do Notion
+  // Links únicos da página. Troque aqui e tudo muda junto.
+  const FORM_WEBHOOK_URL = "https://hook.us2.make.com/qhgl1g3jk121aj2s3vicfmtkkspp5a4o"; // Make: cenário "Imagem que Assina · Inscrição da LP"
   const WHATSAPP_URL = "https://wa.me/554999413515?text=Ol%C3%A1!%20Tenho%20uma%20d%C3%BAvida%20sobre%20o%20workshop%20A%20Imagem%20que%20Assina."; // +55 49 9941-3515
 
   // Google Analytics 4 está no <head> (Google tag). Clarity: preencha o ID para ligar.
@@ -584,14 +676,78 @@
     })(window, document, "clarity", "script", CLARITY_ID);
   }
 
-  document.querySelectorAll("[data-inscricao]").forEach(function (a, i) {
-    if (INSCRICAO_URL) a.href = INSCRICAO_URL;
-    // Conversão: abrir o formulário de inscrição.
-    a.addEventListener("click", function () {
-      if (window.gtag) gtag("event", "clique_inscricao", { posicao: i + 1, texto: a.textContent.trim() });
-    });
+  if (!FORM_WEBHOOK_URL) document.getElementById("aviso-dev").hidden = false;
+
+  // Formulário: envia ao Make, que grava no Notion e devolve o link de pagamento do Mercado Pago.
+  var form = document.getElementById("formulario");
+  // Funil: começou a preencher.
+  form.addEventListener("focusin", function () {
+    if (window.gtag) gtag("event", "inicio_inscricao");
+  }, { once: true });
+  var msg = form.querySelector(".form__msg");
+  var enviar = form.querySelector('button[type="submit"]');
+  var whats = form.elements.whatsapp;
+  var params = new URLSearchParams(location.search);
+
+  whats.addEventListener("input", function () {
+    var n = whats.value.replace(/\D/g, "").length;
+    whats.setCustomValidity(n >= 10 && n <= 13 ? "" : "Informe o WhatsApp com DDD.");
   });
-  if (!INSCRICAO_URL) document.getElementById("aviso-dev").hidden = false;
+
+  function marcarInvalidos() {
+    form.querySelectorAll("input, select, textarea").forEach(function (c) {
+      if (c.name === "site") return;
+      c.setAttribute("aria-invalid", c.checkValidity() ? "false" : "true");
+    });
+  }
+
+  function confirmarSemPagamento() {
+    form.hidden = true;
+    var ok = document.getElementById("form-ok");
+    ok.hidden = false;
+    ok.focus();
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    msg.textContent = "";
+    whats.dispatchEvent(new Event("input"));
+    marcarInvalidos();
+    if (!form.checkValidity()) {
+      msg.textContent = "Confira os campos destacados.";
+      form.querySelector('[aria-invalid="true"]').focus();
+      return;
+    }
+    if (form.elements.site.value) return; // robô
+
+    var dados = new URLSearchParams(new FormData(form));
+    dados.delete("site");
+    if (!dados.has("novidades")) dados.set("novidades", "não");
+    ["utm_source", "utm_medium", "utm_campaign", "utm_content"].forEach(function (k) {
+      if (params.get(k)) dados.set(k, params.get(k));
+    });
+
+    enviar.disabled = true;
+    enviar.textContent = "Enviando…";
+    var limite = new AbortController();
+    var timer = setTimeout(function () { limite.abort(); }, 30000);
+
+    fetch(FORM_WEBHOOK_URL, { method: "POST", body: dados, signal: limite.signal })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (res) {
+        clearTimeout(timer);
+        // Conversão principal: inscrição enviada.
+        if (window.gtag) gtag("event", "inscricao_enviada", { cargo: dados.get("cargo"), origem: dados.get("origem") });
+        if (res && res.pagamento) location.href = res.pagamento;
+        else confirmarSemPagamento();
+      })
+      .catch(function () {
+        clearTimeout(timer);
+        enviar.disabled = false;
+        enviar.textContent = "Ir para o pagamento";
+        msg.innerHTML = 'Não conseguimos enviar agora. Tente de novo ou <a href="' + WHATSAPP_URL + '">fale com a gente no WhatsApp</a>.';
+      });
+  });
 
   // Botões que levam até Informações (o formulário só abre pelo botão de lá).
   document.querySelectorAll("[data-cta]").forEach(function (a, i) {
