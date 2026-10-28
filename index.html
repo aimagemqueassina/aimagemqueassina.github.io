@@ -202,6 +202,7 @@
   .pessoa__bio { margin: 18px 0 0; max-width: 28em; }
   .pessoa__assina { font-family: var(--detalhe); color: var(--laranja); font-size: 2.1rem; line-height: 1; margin: 14px 0 0; }
   .conduz-cta { margin-top: 56px; }
+  .info-cta { margin-top: 40px; }
 
   /* Informações */
   .convite { display: grid; gap: 36px; padding: 36px 0; border-top: 1px solid var(--linha-bordo); border-bottom: 1px solid var(--linha-bordo); }
@@ -227,7 +228,7 @@
   .mapa { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-underline-offset: 3px; }
 
   /* Passos */
-  .passos { list-style: none; margin: 0 0 40px; padding: 0; counter-reset: n; }
+  .passos { list-style: none; margin: 0; padding: 0; counter-reset: n; }
   .passos li {
     counter-increment: n;
     display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 12px; align-items: baseline;
@@ -484,6 +485,7 @@
           </div>
         </dl>
       </div>
+      <a class="btn info-cta" href="#inscricao" data-inscricao>Fazer minha inscrição</a>
     </div>
   </section>
 
@@ -491,11 +493,10 @@
     <div class="wrap">
       <h2>Como se <em class="acento">inscrever</em></h2>
       <ol class="passos">
-        <li><div><strong>Inscrição</strong><p>Clique no botão abaixo e preencha o formulário de inscrição.</p></div></li>
+        <li><div><strong>Inscrição</strong><p>Clique no botão de inscrição e preencha o formulário.</p></div></li>
         <li><div><strong>Pagamento</strong><p>Em até 24h, entramos em contato com as informações para o pagamento.</p></div></li>
         <li><div><strong>Grupo exclusivo</strong><p>Com o pagamento feito, você recebe o link do grupo do workshop no WhatsApp. Lá chegam todas as informações sobre o dia, e o networking já começa antes do encontro.</p></div></li>
       </ol>
-      <a class="btn" href="#inscricao" data-inscricao>Fazer minha inscrição</a>
     </div>
   </section>
 
