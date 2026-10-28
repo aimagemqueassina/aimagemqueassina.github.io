@@ -270,6 +270,7 @@
     border: 2px solid var(--creme); border-radius: 6px;
   }
   .campo textarea { min-height: 66px; resize: vertical; }
+  #f-codigo { text-transform: uppercase; }
   .campo select { appearance: none; padding-right: 40px; cursor: pointer;
     background-image: linear-gradient(45deg, transparent 50%, var(--bordo) 50%), linear-gradient(135deg, var(--bordo) 50%, transparent 50%);
     background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%; background-size: 6px 6px; background-repeat: no-repeat; }
@@ -408,7 +409,7 @@
   <p><span>Vagas limitadas</span><span class="faixa-topo__prazo">Inscrições até 14/11</span></p>
 </div>
 
-<header class="hero">
+<header class="hero" data-secao="topo">
   <div class="hero__texto">
     <p class="hero__rotulo">workshop</p>
     <h1><span>A imagem</span> <span>que <em class="acento">assina</em></span></h1>
@@ -433,7 +434,7 @@
 
 <main>
 
-  <section class="creme degrade-baixo">
+  <section class="creme degrade-baixo" data-secao="dores">
     <div class="wrap">
       <p class="destaque revela">A sua competência técnica abre portas. A forma como você é percebido <em class="acento">decide quais.</em></p>
       <p class="contexto">Antes de você apresentar um projeto, negociar ou liderar uma reunião, as pessoas já formaram uma ideia sobre você. Quase ninguém cuida disso com intenção.</p>
@@ -450,7 +451,7 @@
     </div>
   </section>
 
-  <section class="ponte">
+  <section class="ponte" data-secao="ponte">
     <div class="wrap">
       <h2>Duas horas para enxergar <em class="acento">como você é percebido.</em></h2>
       <div>
@@ -460,7 +461,7 @@
     </div>
   </section>
 
-  <section class="creme">
+  <section class="creme" data-secao="para-quem">
     <div class="wrap">
       <h2>Para <em class="acento">quem</em> é</h2>
       <ul class="perfis">
@@ -472,7 +473,7 @@
     </div>
   </section>
 
-  <section>
+  <section data-secao="quem-conduz">
     <div class="wrap">
       <h2>Quem <em class="acento">conduz</em></h2>
       <div class="duo revela">
@@ -507,7 +508,7 @@
     </div>
   </section>
 
-  <section class="creme" id="informacoes">
+  <section class="creme" id="informacoes" data-secao="informacoes">
     <div class="wrap">
       <h2 class="rotulo">Informações</h2>
       <div class="info-grid">
@@ -557,17 +558,22 @@
                   <option>Autônomo(a) ou profissional liberal</option>
                 </select>
               </div>
-              <div class="campo inteiro">
+              <div class="campo">
                 <label for="f-origem">Como ficou sabendo do workshop?</label>
                 <select id="f-origem" name="origem" required>
                   <option value="">Selecione</option>
                   <option>Palestra no BNI</option>
-                  <option>Convite pessoal</option>
+                  <option>Mensagem no grupo do BNI</option>
+                  <option>Outro grupo de WhatsApp</option>
                   <option>Instagram</option>
                   <option>Indicação de alguém</option>
                   <option>CDL</option>
                   <option>Outro</option>
                 </select>
+              </div>
+              <div class="campo">
+                <label for="f-codigo">Código de desconto <span class="opcional">(opcional)</span></label>
+                <input id="f-codigo" name="codigo" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20">
               </div>
               <div class="campo inteiro">
                 <label for="f-desafio">Maior desafio com a sua imagem no trabalho <span class="opcional">(opcional)</span></label>
@@ -581,7 +587,7 @@
             </div>
             <div class="form__acao">
               <button class="btn" type="submit">Ir para o pagamento</button>
-              <p class="form__nota">Você será levado ao Mercado Pago para pagar R$ 197 com Pix ou cartão.</p>
+              <p class="form__nota">Você será levado ao Mercado Pago para pagar R$ 197 (ou o valor com desconto) no Pix ou cartão.</p>
               <p class="form__msg" role="alert" aria-live="assertive"></p>
             </div>
           </form>
@@ -596,7 +602,7 @@
     </div>
   </section>
 
-  <section id="inscricao">
+  <section id="inscricao" data-secao="como-garantir">
     <div class="wrap">
       <h2>Como garantir <em class="acento">minha vaga</em></h2>
       <ol class="passos">
@@ -607,7 +613,7 @@
     </div>
   </section>
 
-  <section class="creme faq">
+  <section class="creme faq" data-secao="faq">
     <div class="wrap duas-colunas">
       <h2>Perguntas <em class="acento">frequentes</em></h2>
       <div>
@@ -635,7 +641,7 @@
     </div>
   </section>
 
-  <section class="final" id="final">
+  <section class="final" id="final" data-secao="final">
     <div class="wrap">
       <p class="frase">A sua imagem já <em class="acento">assina por você.</em><br> A pergunta é o&nbsp;quê.</p>
       <a class="btn" href="#informacoes" data-cta>Quero participar</a>
@@ -671,6 +677,21 @@
 
   document.documentElement.classList.add("js");
 
+  // ---------- Rastreamento (GA4) ----------
+  // Regra dos nomes: snake_case em português. Só begin_checkout e purchase usam os nomes
+  // recomendados do GA4, para o funil de receita funcionar nos relatórios. Nunca enviar dados pessoais.
+  // Para conferir ao vivo: abra a página com ?debug no fim do endereço e veja o DebugView do GA4.
+  var DEBUG_RASTREIO = new URLSearchParams(location.search).has("debug");
+  if (window.gtag && DEBUG_RASTREIO) gtag("set", "debug_mode", true);
+  function track(nome, dados, depois) {
+    var p = dados || {}, feito = false;
+    function seguir() { if (feito || !depois) return; feito = true; depois(); }
+    if (depois) { p.event_callback = seguir; setTimeout(seguir, 800); } // não trava o cliente se o GA estiver bloqueado
+    try { if (window.gtag) gtag("event", nome, p); else seguir(); } catch (e) { seguir(); }
+    if (DEBUG_RASTREIO && window.console) console.log("[track]", nome, dados || "");
+  }
+  function secaoDe(el) { var s = el.closest("[data-secao]"); return s ? s.dataset.secao : "rodape"; }
+
   if (CLARITY_ID) {
     (function (c, l, a, r, i, t, y) {
       c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
@@ -684,9 +705,16 @@
   // Formulário: envia ao Make, que grava no Notion e devolve o link de pagamento do Mercado Pago.
   var form = document.getElementById("formulario");
   // Funil: começou a preencher.
-  form.addEventListener("focusin", function () {
-    if (window.gtag) gtag("event", "inicio_inscricao");
-  }, { once: true });
+  form.addEventListener("focusin", function () { track("inicio_inscricao"); }, { once: true });
+  // Funil: até onde a pessoa chegou no formulário (uma vez por campo; só o nome do campo, nunca o valor).
+  var camposVistos = {};
+  form.addEventListener("change", function (e) {
+    var c = e.target, nome = c.name;
+    if (!nome || nome === "site" || camposVistos[nome]) return;
+    if (!(c.type === "checkbox" ? c.checked : c.value)) return;
+    camposVistos[nome] = true;
+    track("campo_preenchido", { campo: nome });
+  });
   var msg = form.querySelector(".form__msg");
   var enviar = form.querySelector('button[type="submit"]');
   var whats = form.elements.whatsapp;
@@ -718,6 +746,8 @@
     marcarInvalidos();
     if (!form.checkValidity()) {
       msg.textContent = "Confira os campos destacados.";
+      var invalidos = [].map.call(form.querySelectorAll('[aria-invalid="true"]'), function (c) { return c.name; });
+      track("erro_formulario", { campos: invalidos.join(","), total: invalidos.length });
       form.querySelector('[aria-invalid="true"]').focus();
       return;
     }
@@ -739,29 +769,46 @@
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(function (res) {
         clearTimeout(timer);
+        // Código de desconto que não existe: nada foi salvo, a pessoa corrige ou deixa em branco.
+        if (res && res.codigo_invalido) {
+          enviar.disabled = false;
+          enviar.textContent = "Ir para o pagamento";
+          form.elements.codigo.setAttribute("aria-invalid", "true");
+          msg.textContent = "Esse código de desconto não é válido. Confira o código ou deixe o campo em branco.";
+          track("codigo_invalido");
+          form.elements.codigo.focus();
+          return;
+        }
         // Vagas esgotadas (25 pagamentos confirmados): a inscrição fica como lista de espera no Notion.
         if (res && res.esgotado) {
-          if (window.gtag) gtag("event", "lista_espera", { cargo: dados.get("cargo"), origem: dados.get("origem") });
+          track("lista_espera", { cargo: dados.get("cargo"), origem: dados.get("origem") });
           mostrarAviso("form-esgotado");
           return;
         }
-        // Conversão principal: inscrição enviada.
-        if (window.gtag) gtag("event", "inscricao_enviada", { cargo: dados.get("cargo"), origem: dados.get("origem") });
-        if (res && res.pagamento) location.href = res.pagamento;
-        else mostrarAviso("form-ok");
+        // Conversão principal: inscrição enviada. Em seguida, o início do pagamento (a ida ao Mercado Pago
+        // espera o evento sair, no máximo 0,8 s).
+        track("inscricao_enviada", { cargo: dados.get("cargo"), origem: dados.get("origem") });
+        if (res && res.pagamento) {
+          var valor = Number(res.valor) || 197; // o Make devolve o valor real (R$ 98 com código válido)
+          track("begin_checkout", {
+            value: valor, currency: "BRL", coupon: res.cupom || undefined,
+            items: [{ item_id: "workshop-imagem-que-assina", item_name: "Workshop A Imagem que Assina", price: valor, quantity: 1 }]
+          }, function () { location.href = res.pagamento; });
+        } else mostrarAviso("form-ok");
       })
-      .catch(function () {
+      .catch(function (erro) {
         clearTimeout(timer);
         enviar.disabled = false;
         enviar.textContent = "Ir para o pagamento";
-        msg.innerHTML = 'Não conseguimos enviar agora. Tente de novo ou <a href="' + WHATSAPP_URL + '">fale com a gente no WhatsApp</a>.';
+        track("erro_envio", { motivo: erro && erro.name === "AbortError" ? "tempo" : "falha" });
+        msg.innerHTML = 'Não conseguimos enviar agora. Tente de novo ou <a href="' + WHATSAPP_URL + '" data-local="erro_envio">fale com a gente no WhatsApp</a>.';
       });
   });
 
   // Botões que levam até Informações (o formulário só abre pelo botão de lá).
   document.querySelectorAll("[data-cta]").forEach(function (a, i) {
     a.addEventListener("click", function () {
-      if (window.gtag) gtag("event", "clique_cta", { posicao: i + 1, texto: a.textContent.trim() });
+      track("clique_cta", { posicao: i + 1, secao: secaoDe(a), texto: a.textContent.trim() });
     });
   });
 
@@ -769,6 +816,33 @@
     if (WHATSAPP_URL) a.href = WHATSAPP_URL;
     else a.classList.add("pendente");
   });
+
+  // Cliques em links de contato e mapa (um ouvinte só, vale também para links criados depois).
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("a");
+    if (!a) return;
+    if (a.hasAttribute("data-whatsapp") || a.dataset.local) track("clique_whatsapp", { local: a.dataset.local || "rodape" });
+    else if (a.classList.contains("mapa")) track("clique_mapa");
+  });
+
+  // Perguntas frequentes abertas.
+  document.querySelectorAll(".faq details").forEach(function (d) {
+    d.addEventListener("toggle", function () {
+      if (d.open) track("abrir_faq", { pergunta: d.querySelector("summary").textContent.trim() });
+    });
+  });
+
+  // Seções vistas: uma vez cada, quando cruzam o meio da tela. Mostra até onde a página é lida.
+  if ("IntersectionObserver" in window) {
+    var vistas = new IntersectionObserver(function (itens) {
+      itens.forEach(function (i) {
+        if (!i.isIntersecting) return;
+        vistas.unobserve(i.target);
+        track("ver_secao", { secao: i.target.dataset.secao });
+      });
+    }, { rootMargin: "-50% 0px -50% 0px" });
+    document.querySelectorAll("[data-secao]").forEach(function (s) { vistas.observe(s); });
+  }
 
   var revela = document.querySelectorAll(".revela");
   function mostrar(el) { el.classList.add("visivel"); }

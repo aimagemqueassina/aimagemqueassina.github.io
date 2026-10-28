@@ -95,7 +95,20 @@
   var aprovado = situacao === "approved";
   document.querySelector('[data-status="' + (aprovado ? "aprovado" : "pendente") + '"]').hidden = false;
 
-  document.querySelectorAll("[data-whatsapp]").forEach(function (a) { a.href = WHATSAPP_URL; });
+  // ---------- Rastreamento (GA4): mesmas regras da página principal ----------
+  // snake_case em português; só begin_checkout e purchase usam nomes do GA4. Nunca enviar dados pessoais.
+  // Para conferir ao vivo: acrescente ?debug ao endereço e veja o DebugView do GA4.
+  var DEBUG_RASTREIO = q.has("debug");
+  if (window.gtag && DEBUG_RASTREIO) gtag("set", "debug_mode", true);
+  function track(nome, dados) {
+    try { if (window.gtag) gtag("event", nome, dados || {}); } catch (e) {}
+    if (DEBUG_RASTREIO && window.console) console.log("[track]", nome, dados || "");
+  }
+
+  document.querySelectorAll("[data-whatsapp]").forEach(function (a) {
+    a.href = WHATSAPP_URL;
+    a.addEventListener("click", function () { track("clique_whatsapp", { local: "confirmacao" }); });
+  });
 
   // Pagamento pendente: o botão leva de volta ao checkout do Mercado Pago dessa inscrição.
   var preferencia = q.get("preference_id");
@@ -105,6 +118,8 @@
     voltar.href = preferencia
       ? "https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=" + encodeURIComponent(preferencia)
       : "./#informacoes";
+    track("pagamento_pendente");
+    voltar.addEventListener("click", function () { track("voltar_pagamento"); });
   }
 
   // Pagamento aprovado: o Make confere o pagamento no Mercado Pago e só então devolve o link do grupo.
@@ -121,20 +136,20 @@
         document.querySelector("[data-grupo-texto]").textContent = "Entre agora no grupo do workshop no WhatsApp. Lá chegam todas as informações sobre o dia, e o networking já começa antes do encontro.";
         // Um só botão principal: o de voltar vira link.
         document.querySelector("[data-voltar]").className = "link";
-        botao.addEventListener("click", function () {
-          if (window.gtag) gtag("event", "entrar_grupo");
-        });
+        botao.addEventListener("click", function () { track("entrar_grupo"); });
+        // Compra confirmada de verdade (conferida no Mercado Pago pelo Make). Uma vez por pagamento.
+        var chave = "compra_" + pagamento, jaEnviada = false;
+        try { jaEnviada = !!localStorage.getItem(chave); localStorage.setItem(chave, "1"); } catch (e) {}
+        if (!jaEnviada) {
+          var valor = Number(res.valor) || 197; // valor realmente pago (R$ 98 com código de desconto)
+          track("purchase", {
+            transaction_id: pagamento,
+            value: valor, currency: "BRL",
+            items: [{ item_id: "workshop-imagem-que-assina", item_name: "Workshop A Imagem que Assina", price: valor, quantity: 1 }]
+          });
+        }
       })
       .catch(function () {});
-  }
-
-  // Conversão final no Analytics: compra aprovada.
-  if (aprovado && window.gtag) {
-    gtag("event", "purchase", {
-      transaction_id: pagamento || undefined,
-      value: 197, currency: "BRL",
-      items: [{ item_id: "workshop-imagem-que-assina", item_name: "Workshop A Imagem que Assina", price: 197, quantity: 1 }]
-    });
   }
 </script>
 </body>
