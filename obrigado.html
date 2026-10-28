@@ -58,6 +58,8 @@
   }
   .btn:hover { background: var(--laranja-claro); }
   .link { display: inline-flex; align-items: center; min-height: 52px; color: var(--creme); font-weight: 600; text-underline-offset: 3px; }
+  .grupo { margin-top: 12px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   [hidden] { display: none; }
 </style>
 </head>
@@ -67,8 +69,9 @@
 
   <div data-status="aprovado" hidden>
     <h1>Pagamento confirmado. <em>Sua vaga está garantida.</em></h1>
-    <p>Em até 2 horas você recebe no seu WhatsApp o link do grupo do workshop. Lá chegam todas as informações sobre o dia.</p>
+    <p data-grupo-texto>Em até 2 horas você recebe no seu WhatsApp o link do grupo do workshop. Lá chegam todas as informações sobre o dia.</p>
     <p>Nos vemos dia 17 de novembro, às 19h, na CDL Maravilha.</p>
+    <a class="btn grupo" href="#" target="_blank" rel="noopener" data-grupo hidden>Entrar no grupo do WhatsApp<span class="sr-only"> (abre em nova aba)</span></a>
   </div>
 
   <div data-status="pendente" hidden>
@@ -104,8 +107,28 @@
       : "./#informacoes";
   }
 
-  // Conversão final no Analytics: compra aprovada.
+  // Pagamento aprovado: o Make confere o pagamento no Mercado Pago e só então devolve o link do grupo.
+  const GRUPO_WEBHOOK_URL = "https://hook.us2.make.com/fywyk6w3ew7w7oq6u1d3aulo1o5u5o2a"; // Make: cenário "Pagamento confirmado"
   var pagamento = q.get("payment_id") || q.get("collection_id");
+  if (aprovado && pagamento && /^[0-9]+$/.test(pagamento)) {
+    fetch(GRUPO_WEBHOOK_URL, { method: "POST", body: new URLSearchParams({ payment_id: pagamento }) })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res || !res.grupo) return; // sem confirmação: fica o aviso de envio em até 2h
+        var botao = document.querySelector("[data-grupo]");
+        botao.href = res.grupo;
+        botao.hidden = false;
+        document.querySelector("[data-grupo-texto]").textContent = "Entre agora no grupo do workshop no WhatsApp. Lá chegam todas as informações sobre o dia, e o networking já começa antes do encontro.";
+        // Um só botão principal: o de voltar vira link.
+        document.querySelector("[data-voltar]").className = "link";
+        botao.addEventListener("click", function () {
+          if (window.gtag) gtag("event", "entrar_grupo");
+        });
+      })
+      .catch(function () {});
+  }
+
+  // Conversão final no Analytics: compra aprovada.
   if (aprovado && window.gtag) {
     gtag("event", "purchase", {
       transaction_id: pagamento || undefined,
