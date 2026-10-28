@@ -7,6 +7,16 @@
 <meta name="description" content="17/11, 19h, CDL Maravilha. Imagem e marca pessoal para ir além da competência técnica.">
 <meta name="theme-color" content="#6B0D1B">
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4N6QSP6R6C"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4N6QSP6R6C');
+</script>
+
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:title" content="Workshop A Imagem que Assina">
@@ -561,20 +571,11 @@
   const INSCRICAO_URL = "https://impartial-lodge-762.notion.site/406144e49d6d80769597e198e65dce9d?pvs=105"; // link público do formulário do Notion
   const WHATSAPP_URL = "https://wa.me/554999413515?text=Ol%C3%A1!%20Tenho%20uma%20d%C3%BAvida%20sobre%20o%20workshop%20A%20Imagem%20que%20Assina."; // +55 49 9941-3515
 
-  // Métricas: preencha os IDs para ligar. Vazios, nada é carregado.
-  const GA4_ID = "G-4N6QSP6R6C"; // Google Analytics 4
+  // Google Analytics 4 está no <head> (Google tag). Clarity: preencha o ID para ligar.
   const CLARITY_ID = "";  // Microsoft Clarity, ID do projeto
 
   document.documentElement.classList.add("js");
 
-  if (GA4_ID) {
-    var ga = document.createElement("script");
-    ga.async = true; ga.src = "https://www.googletagmanager.com/gtag/js?id=" + GA4_ID;
-    document.head.appendChild(ga);
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () { dataLayer.push(arguments); };
-    gtag("js", new Date()); gtag("config", GA4_ID);
-  }
   if (CLARITY_ID) {
     (function (c, l, a, r, i, t, y) {
       c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
