@@ -68,7 +68,7 @@
   .creme :focus-visible { outline-color: var(--bordo); }
 
   .wrap { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 var(--gutter); }
-  section { padding: var(--secao) 0; }
+  section { padding: var(--secao) 0; scroll-margin-top: 31px; }
   .creme { background: var(--creme); color: var(--bordo); }
 
   h1, h2, h3 { font-family: var(--titulo); font-weight: 400; margin: 0; text-wrap: balance; overflow-wrap: break-word; }
@@ -263,14 +263,14 @@
 
   /* Rodapé */
   footer { background: var(--verde); color: var(--creme); padding: 56px 0 40px; font-size: .9375rem; }
-  .marcas { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin: 0 0 36px; }
+  .rodape { display: grid; gap: 36px; }
+  .marcas { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
   .marcas img.gabrielle { width: 236px; }
   .marcas img.mika { width: 84px; }
-  .contatos { list-style: none; margin: 0 0 24px; padding: 0; display: grid; }
-  .contatos a { display: inline-flex; align-items: center; min-height: 44px; text-underline-offset: 3px; }
-  .contatos a:hover { color: var(--laranja); }
-  .contatos a.pendente { min-height: 0; margin: 12px 0; }
-  .rodape-fim { font-size: .8125rem; opacity: .8; margin: 0; padding-top: 20px; border-top: 1px solid rgba(245, 221, 203, .15); text-wrap: balance; }
+  .whats { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 500; text-underline-offset: 3px; }
+  .whats:hover { color: var(--laranja); }
+  .whats__icone { width: 22px; height: 22px; flex: none; fill: currentColor; }
+  .rodape-fim { font-size: .8125rem; opacity: .8; margin: 12px 0 0; text-wrap: balance; }
 
   /* Entrada suave */
   .js .revela { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
@@ -303,6 +303,8 @@
   @media (min-width: 600px) {
     :root { --gutter: 40px; --secao: 120px; }
     .duo { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
+    .rodape { grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 48px; }
+    .rodape__info { text-align: right; }
     .passos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--linha-creme); }
     .passos li { display: block; padding: 28px 24px 8px; border: 0; }
     .passos li:first-child { border-top: 0; padding-left: 0; }
@@ -369,7 +371,7 @@
       <span class="quando__col">19h às 21h<br>CDL Maravilha</span>
     </div>
     <div class="hero__acao">
-      <a class="btn" href="#inscricao" data-inscricao>Quero garantir minha vaga</a>
+      <a class="btn" href="#informacoes" data-cta>Quero garantir minha vaga</a>
     </div>
   </div>
   <figure class="hero__foto">
@@ -405,7 +407,7 @@
       <h2>Duas horas para enxergar <em class="acento">como você é percebido.</em></h2>
       <div>
         <p>Uma vivência em grupo, não uma palestra. Você participa, e sai com a sua própria estratégia para mudar isso.</p>
-        <a class="btn" href="#inscricao" data-inscricao>Quero garantir minha vaga</a>
+        <a class="btn" href="#informacoes" data-cta>Quero garantir minha vaga</a>
       </div>
     </div>
   </section>
@@ -453,11 +455,11 @@
           <p class="pessoa__assina" aria-hidden="true">Milena</p>
         </article>
       </div>
-      <a class="btn conduz-cta" href="#inscricao" data-inscricao>Quero garantir minha vaga</a>
+      <a class="btn conduz-cta" href="#informacoes" data-cta>Quero garantir minha vaga</a>
     </div>
   </section>
 
-  <section class="creme">
+  <section class="creme" id="informacoes">
     <div class="wrap">
       <h2 class="rotulo">Informações</h2>
       <div class="convite">
@@ -485,7 +487,7 @@
           </div>
         </dl>
       </div>
-      <a class="btn info-cta" href="#inscricao" data-inscricao>Fazer minha inscrição</a>
+      <a class="btn info-cta" href="#informacoes" data-inscricao>Fazer minha inscrição</a>
     </div>
   </section>
 
@@ -531,23 +533,25 @@
   <section class="final" id="final">
     <div class="wrap">
       <p class="frase">A sua imagem já <em class="acento">assina por você.</em><br> A pergunta é o&nbsp;quê.</p>
-      <a class="btn" href="#inscricao" data-inscricao>Quero participar</a>
+      <a class="btn" href="#informacoes" data-cta>Quero participar</a>
     </div>
   </section>
 
 </main>
 
 <footer>
-  <div class="wrap">
-    <span class="rotulo">Realização</span>
-    <div class="marcas">
-      <img class="gabrielle" src="assets/marcas/gabrielle.png" width="560" height="157" loading="lazy" alt="Gabrielle, estilo e análise corporal">
-      <img class="mika" src="assets/marcas/mika.png" width="240" height="164" loading="lazy" alt="MIKA design e estratégia">
+  <div class="wrap rodape">
+    <div class="rodape__marca">
+      <span class="rotulo">Realização</span>
+      <div class="marcas">
+        <img class="gabrielle" src="assets/marcas/gabrielle.png" width="560" height="157" loading="lazy" alt="Gabrielle, estilo e análise corporal">
+        <img class="mika" src="assets/marcas/mika.png" width="240" height="164" loading="lazy" alt="MIKA design e estratégia">
+      </div>
     </div>
-    <ul class="contatos">
-      <li><a href="#" data-whatsapp>WhatsApp para dúvidas</a></li>
-    </ul>
-    <p class="rodape-fim">Workshop A Imagem que Assina&nbsp;· 17 de novembro&nbsp;· CDL Maravilha</p>
+    <div class="rodape__info">
+      <a class="whats" href="#" data-whatsapp><svg class="whats__icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>WhatsApp para dúvidas</a>
+      <p class="rodape-fim">Workshop A Imagem que Assina&nbsp;· 17 de novembro&nbsp;· CDL Maravilha</p>
+    </div>
   </div>
 </footer>
 
@@ -581,12 +585,19 @@
 
   document.querySelectorAll("[data-inscricao]").forEach(function (a, i) {
     if (INSCRICAO_URL) a.href = INSCRICAO_URL;
-    // Conversão: clique em qualquer botão de inscrição, com a posição do botão na página.
+    // Conversão: abrir o formulário de inscrição.
     a.addEventListener("click", function () {
       if (window.gtag) gtag("event", "clique_inscricao", { posicao: i + 1, texto: a.textContent.trim() });
     });
   });
   if (!INSCRICAO_URL) document.getElementById("aviso-dev").hidden = false;
+
+  // Botões que levam até Informações (o formulário só abre pelo botão de lá).
+  document.querySelectorAll("[data-cta]").forEach(function (a, i) {
+    a.addEventListener("click", function () {
+      if (window.gtag) gtag("event", "clique_cta", { posicao: i + 1, texto: a.textContent.trim() });
+    });
+  });
 
   document.querySelectorAll("[data-whatsapp]").forEach(function (a) {
     if (WHATSAPP_URL) a.href = WHATSAPP_URL;
