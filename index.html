@@ -588,6 +588,9 @@
           <div class="form__ok" id="form-ok" tabindex="-1" hidden>
             <p><strong>Inscrição recebida.</strong>Em até 24h enviamos o link de pagamento no seu WhatsApp. A vaga é confirmada com o pagamento.</p>
           </div>
+          <div class="form__ok" id="form-esgotado" tabindex="-1" hidden>
+            <p><strong>Vagas esgotadas.</strong>Todas as vagas desta turma foram preenchidas. Seus dados ficaram na nossa lista de espera: se abrir uma vaga, avisamos você pelo WhatsApp.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -701,11 +704,11 @@
     });
   }
 
-  function confirmarSemPagamento() {
+  function mostrarAviso(id) {
     form.hidden = true;
-    var ok = document.getElementById("form-ok");
-    ok.hidden = false;
-    ok.focus();
+    var aviso = document.getElementById(id);
+    aviso.hidden = false;
+    aviso.focus();
   }
 
   form.addEventListener("submit", function (e) {
@@ -736,10 +739,16 @@
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(function (res) {
         clearTimeout(timer);
+        // Vagas esgotadas (25 pagamentos confirmados): a inscrição fica como lista de espera no Notion.
+        if (res && res.esgotado) {
+          if (window.gtag) gtag("event", "lista_espera", { cargo: dados.get("cargo"), origem: dados.get("origem") });
+          mostrarAviso("form-esgotado");
+          return;
+        }
         // Conversão principal: inscrição enviada.
         if (window.gtag) gtag("event", "inscricao_enviada", { cargo: dados.get("cargo"), origem: dados.get("origem") });
         if (res && res.pagamento) location.href = res.pagamento;
-        else confirmarSemPagamento();
+        else mostrarAviso("form-ok");
       })
       .catch(function () {
         clearTimeout(timer);
